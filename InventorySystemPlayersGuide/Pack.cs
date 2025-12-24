@@ -53,6 +53,80 @@ public class Pack
         }
     }
 
+    public void PackItemCreator(Pack itemPack)
+    {
+        int counter = _itemCount;
+        bool addItemstoPackCheck = true;
+        while (addItemstoPackCheck)
+        {
+            Console.WriteLine("Adding Item...");
+            Console.WriteLine("1) Arrow, 2) Bow, 3) Sword, 4) Food, 5) Water, 6) Rope...");
+            string userInput = "";
+            userInput = Console.ReadLine();
+            int convertedUserInput = UserInputConverter(userInput);
+            switch (convertedUserInput)
+            {
+                case 1:
+                    Add(new Arrow());
+                    counter++;
+                    break;
+                case 2:
+                    Add(new Bow());
+                    counter++;
+                    break;
+                case 3:
+                    Add(new Sword());
+                    counter++;
+                    break;
+                case 4:
+                    Add(new Food());
+                    counter++;
+                    break;
+                case 5:
+                    Add(new Water());
+                    counter++;
+                    break;
+                case 6:
+                    Add(new Rope());
+                    counter++;
+                    break;
+                default:
+                    Console.WriteLine("Invalid Converted Input!");
+                    break;
+            }
+            Console.WriteLine("Would you like to add another item? Y: Yes, N: No");
+            string loopInput = Console.ReadLine();
+            if (loopInput == "N") addItemstoPackCheck = false;
+        }
+    }
+
+    private int UserInputConverter(string userInput)
+    {
+        while (true)
+        {
+            if (userInput == null || userInput == String.Empty)
+            {
+                Console.WriteLine("Input cannot be null or empty!: ");
+                continue;
+            }
+            userInput = userInput.Trim();
+            int number;
+            if (!int.TryParse(userInput, out number))
+            {
+                Console.WriteLine("Input must be an integer!");
+                continue;
+            }
+
+            if (number < 1 || number > 6)
+            {
+                Console.WriteLine("Input must be between 1 and 6!");
+                continue;
+            }
+            return number;
+        }
+    }
+    
+
     public static Pack SmallPack() => new Pack(10, 10.0f, 8.0f);
     public static Pack MediumPack() => new Pack(15, 15.0f, 12.0f);
     public static Pack LargePack() => new Pack(20, 20.0f, 15.0f);
