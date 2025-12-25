@@ -29,7 +29,7 @@ public class Pack
             Console.WriteLine($"VolumeExceededError! Cannot add an item beyond Maximum Pack Volume! Weight: {item.Weight}, Max Weight: {MaximumPackWeight}");
             return false;
         }
-
+        
         if (item.Volume > MaximumPackVolume)
         {
             Console.WriteLine($"VolumeExceededError! Cannot add an item beyond Maximum Pack Volume! Volume: {item.Volume}, Max Volume: {MaximumPackVolume}");
@@ -44,20 +44,22 @@ public class Pack
 
     public void ShowItemDetails()
     {
+        Console.Clear();
         Console.WriteLine($"Maximum Item Count: {MaximumItemCount}");
         Console.WriteLine($"Maximum Pack Weight: {MaximumPackWeight}");
         Console.WriteLine($"Maximum Pack Volume: {MaximumPackVolume}");
         for (int i = 0; i < Items.Length; i++)
         {
+            if (Items[i] == null) continue;
             Console.WriteLine($"{i + 1}). Type: {Items[i].GetType().Name} Weight: {Items[i].Weight}, Volume: {Items[i].Volume}");
         }
     }
 
-    public void PackItemCreator(Pack itemPack)
+    public void PackItemCreator()
     {
         int counter = _itemCount;
-        bool addItemstoPackCheck = true;
-        while (addItemstoPackCheck)
+        bool addItemsToPackCheck = true;
+        while (addItemsToPackCheck)
         {
             Console.WriteLine("Adding Item...");
             Console.WriteLine("1) Arrow, 2) Bow, 3) Sword, 4) Food, 5) Water, 6) Rope...");
@@ -96,7 +98,8 @@ public class Pack
             }
             Console.WriteLine("Would you like to add another item? Y: Yes, N: No");
             string loopInput = Console.ReadLine();
-            if (loopInput == "N") addItemstoPackCheck = false;
+            if (loopInput == "N") addItemsToPackCheck = false;
+            ShowItemDetails();
         }
     }
 
@@ -116,7 +119,6 @@ public class Pack
                 Console.WriteLine("Input must be an integer!");
                 continue;
             }
-
             if (number < 1 || number > 6)
             {
                 Console.WriteLine("Input must be between 1 and 6!");
