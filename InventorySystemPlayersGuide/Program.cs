@@ -2,7 +2,6 @@
 
 using InventorySystemPlayersGuide;
 
-Console.WriteLine("Hello, World!");
 bool loopCheck = true;
 while (loopCheck)
 {
@@ -12,23 +11,20 @@ while (loopCheck)
     {
         var pack = Pack.SmallPack();
         pack.ShowItemDetails();
-        pack.PackItemCreator();
+        pack.PackItemCreator(out loopCheck);
     }
     if (userNumber == 2)
     {
         var pack = Pack.MediumPack();
         pack.ShowItemDetails();
-        pack.PackItemCreator();
+        pack.PackItemCreator(out loopCheck);
     }
     if (userNumber == 3)
     {
         var pack = Pack.LargePack();
         pack.ShowItemDetails();
-        pack.PackItemCreator();
+        pack.PackItemCreator(out loopCheck);
     }
-    
-    loopCheck = false;
-
 }
 
 

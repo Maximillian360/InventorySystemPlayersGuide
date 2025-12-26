@@ -1,4 +1,6 @@
-﻿namespace InventorySystemPlayersGuide;
+﻿using Microsoft.VisualBasic.CompilerServices;
+
+namespace InventorySystemPlayersGuide;
 
 public class Pack
 {
@@ -6,6 +8,8 @@ public class Pack
     public InventoryItem[] Items { get; set; }
     public float MaximumPackWeight { get; init; }
     public float MaximumPackVolume { get; init; }
+    public float CurrentPackWeight { get; private set; }
+    public float CurrentPackVolume { get; private set; }
     private int _itemCount = 0;
 
     public Pack(int maximumItemCount, float maximumPackWeight, float maximumPackVolume)
@@ -13,6 +17,8 @@ public class Pack
         MaximumItemCount = maximumItemCount;
         MaximumPackWeight = maximumPackWeight;
         MaximumPackVolume = maximumPackVolume;
+        CurrentPackWeight = 0;
+        CurrentPackVolume = 0;
         Items = new InventoryItem[MaximumItemCount];
     }
 
@@ -24,13 +30,13 @@ public class Pack
             return false;
         }
         
-        if (item.Weight > MaximumPackWeight)
+        if (item.Weight + CurrentPackWeight > MaximumPackWeight)
         {
             Console.WriteLine($"VolumeExceededError! Cannot add an item beyond Maximum Pack Volume! Weight: {item.Weight}, Max Weight: {MaximumPackWeight}");
             return false;
         }
         
-        if (item.Volume > MaximumPackVolume)
+        if (item.Volume + CurrentPackVolume > MaximumPackVolume)
         {
             Console.WriteLine($"VolumeExceededError! Cannot add an item beyond Maximum Pack Volume! Volume: {item.Volume}, Max Volume: {MaximumPackVolume}");
             return false;
@@ -38,34 +44,24 @@ public class Pack
         
         Items[_itemCount] = item;
         _itemCount++;
-        Console.WriteLine("Item added successfully!");
+        CurrentPackWeight += item.Weight;
+        CurrentPackVolume += item.Volume;
+        Console.WriteLine($"Item: {item.GetType().Name} added successfully!");
+        Console.WriteLine($"Current Weight: {CurrentPackWeight} / {MaximumPackWeight}, Current Volume: {CurrentPackVolume} / {MaximumPackVolume}");
         return true;
     }
 
-    public void ShowItemDetails()
-    {
-        Console.Clear();
-        Console.WriteLine($"Maximum Item Count: {MaximumItemCount}");
-        Console.WriteLine($"Maximum Pack Weight: {MaximumPackWeight}");
-        Console.WriteLine($"Maximum Pack Volume: {MaximumPackVolume}");
-        for (int i = 0; i < Items.Length; i++)
-        {
-            if (Items[i] == null) continue;
-            Console.WriteLine($"{i + 1}). Type: {Items[i].GetType().Name} Weight: {Items[i].Weight}, Volume: {Items[i].Volume}");
-        }
-    }
-
-    public void PackItemCreator()
+    public void PackItemCreator(out bool loopCheck)
     {
         int counter = _itemCount;
-        bool addItemsToPackCheck = true;
-        while (addItemsToPackCheck)
+        loopCheck = true;
+        while (loopCheck)
         {
-            Console.WriteLine("Adding Item...");
+            Console.WriteLine("Press the following number to add the item:");
             Console.WriteLine("1) Arrow, 2) Bow, 3) Sword, 4) Food, 5) Water, 6) Rope...");
             string userInput = "";
             userInput = Console.ReadLine();
-            int convertedUserInput = UserInputConverter(userInput);
+            int? convertedUserInput = UserInputConverter(userInput);
             switch (convertedUserInput)
             {
                 case 1:
@@ -97,32 +93,51 @@ public class Pack
                     break;
             }
             Console.WriteLine("Would you like to add another item? Y: Yes, N: No");
-            string loopInput = Console.ReadLine();
-            if (loopInput == "N") addItemsToPackCheck = false;
+            string loopInput = Console.ReadLine().ToLower();
+            if (loopInput == "n")
+            {
+                Console.WriteLine("Exitting...");
+                loopCheck = false;
+                break;
+            }
             ShowItemDetails();
         }
     }
+    
+    public void ShowItemDetails()
+    {
+        Console.Clear();
+        Console.WriteLine($"Current Item Count: {_itemCount} / {MaximumItemCount}");
+        Console.WriteLine($"Current Pack Weight: {CurrentPackWeight} / {MaximumPackWeight}");
+        Console.WriteLine($"Current Pack Volume: {CurrentPackVolume} / {MaximumPackVolume}");
+        for (int i = 0; i < Items.Length; i++)
+        {
+            if (Items[i] == null) continue;
+            Console.WriteLine("Current Items:");
+            Console.WriteLine($"{i + 1}) Type: {Items[i].GetType().Name}, Weight: {Items[i].Weight}, Volume: {Items[i].Volume}");
+        }
+    }
 
-    private int UserInputConverter(string userInput)
+    private int? UserInputConverter(string userInput)
     {
         while (true)
         {
             if (userInput == null || userInput == String.Empty)
             {
                 Console.WriteLine("Input cannot be null or empty!: ");
-                continue;
+                return null;
             }
             userInput = userInput.Trim();
             int number;
             if (!int.TryParse(userInput, out number))
             {
                 Console.WriteLine("Input must be an integer!");
-                continue;
+                return null;
             }
             if (number < 1 || number > 6)
             {
                 Console.WriteLine("Input must be between 1 and 6!");
-                continue;
+                return null;
             }
             return number;
         }
