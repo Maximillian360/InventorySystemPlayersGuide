@@ -100,23 +100,37 @@ public class Pack
                 loopCheck = false;
                 break;
             }
-            ShowItemDetails();
+            // ShowItemDetails();
+            string packItems = ToString();
+            Console.WriteLine($"Pack: {packItems}");
         }
     }
-    
-    public void ShowItemDetails()
+
+    public override string ToString()
     {
         Console.Clear();
-        Console.WriteLine($"Current Item Count: {_itemCount} / {MaximumItemCount}");
-        Console.WriteLine($"Current Pack Weight: {CurrentPackWeight} / {MaximumPackWeight}");
-        Console.WriteLine($"Current Pack Volume: {CurrentPackVolume} / {MaximumPackVolume}");
+        string packItems = "Pack contains ";
         for (int i = 0; i < Items.Length; i++)
         {
             if (Items[i] == null) continue;
-            Console.WriteLine("Current Items:");
-            Console.WriteLine($"{i + 1}) Type: {Items[i].GetType().Name}, Weight: {Items[i].Weight}, Volume: {Items[i].Volume}");
+            packItems += Items[i] + " ";
         }
+        return packItems;
     }
+
+    // public void ShowItemDetails()
+    // {
+    //     Console.Clear();
+    //     Console.WriteLine($"Current Item Count: {_itemCount} / {MaximumItemCount}");
+    //     Console.WriteLine($"Current Pack Weight: {CurrentPackWeight} / {MaximumPackWeight}");
+    //     Console.WriteLine($"Current Pack Volume: {CurrentPackVolume} / {MaximumPackVolume}");
+    //     for (int i = 0; i < Items.Length; i++)
+    //     {
+    //         if (Items[i] == null) continue;
+    //         Console.WriteLine("Current Items:");
+    //         Console.WriteLine($"{i + 1}) Type: {Items[i].GetType().Name}, Weight: {Items[i].Weight}, Volume: {Items[i].Volume}");
+    //     }
+    // }
 
     private int? UserInputConverter(string userInput)
     {

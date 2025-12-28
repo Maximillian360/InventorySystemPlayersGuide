@@ -10,19 +10,19 @@ while (loopCheck)
     if (userNumber == 1)
     {
         var pack = Pack.SmallPack();
-        pack.ShowItemDetails();
+        // pack.ToString();
         pack.PackItemCreator(out loopCheck);
     }
     if (userNumber == 2)
     {
         var pack = Pack.MediumPack();
-        pack.ShowItemDetails();
+        // pack.ToString();
         pack.PackItemCreator(out loopCheck);
     }
     if (userNumber == 3)
     {
         var pack = Pack.LargePack();
-        pack.ShowItemDetails();
+        // pack.ToString();
         pack.PackItemCreator(out loopCheck);
     }
 }
